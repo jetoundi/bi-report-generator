@@ -2,203 +2,530 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rapport BI — Ventes Demo 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#FDFAF3;color:#1E1810;font-family:'Segoe UI',sans-serif;padding:2rem;max-width:1100px;margin:0 auto}
-header{background:#1E1810;color:#FAF7F0;padding:2rem 2.5rem;border-radius:10px;margin-bottom:2rem;display:flex;justify-content:space-between;align-items:flex-start}
-header h1{font-size:1.6rem;font-weight:700;margin-bottom:.4rem}
-header p{font-size:.78rem;opacity:.45}
-.badge{background:#C9A84C;color:#1E1810;font-size:.65rem;font-weight:700;padding:.3rem .85rem;border-radius:20px;letter-spacing:.1em;text-transform:uppercase}
-.sl{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:#8B7355;margin:1.75rem 0 1rem;display:flex;align-items:center;gap:.75rem}
-.sl::after{content:'';flex:1;height:1px;background:#E4DDD0}
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:.5rem}
-.kpi{background:white;border:1px solid #E4DDD0;border-radius:8px;padding:1.25rem;text-align:center}
-.kn{font-size:2rem;font-weight:700;color:#4A7C6F;margin-bottom:.25rem}
-.kl{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#8B7355}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
-.card{background:white;border:1px solid #E4DDD0;border-radius:8px;padding:1.5rem}
-.card h3{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:#8B7355;margin-bottom:1.1rem}
-.card.full{grid-column:1/-1}
-.month-chart{display:flex;align-items:flex-end;gap:4px;height:80px;padding-top:1rem}
-.mbar{background:#4A7C6F;border-radius:2px 2px 0 0;flex:1;transition:height .3s;position:relative}
-.mbar:hover{background:#C9A84C}
-.mlbl{font-size:8px;color:#8B7355;text-align:center;margin-top:3px;display:block}
-footer{text-align:center;padding:1.5rem;font-size:.7rem;color:#8B7355;border-top:1px solid #E4DDD0;margin-top:2rem}
+:root{
+  --bg:#FDFAF3;--bg2:#F0EBE0;--card:#FFFFFF;--dark:#1E1810;
+  --text:#1E1810;--muted:#8B7355;--border:#E4DDD0;
+  --green:#4A7C6F;--gold:#C9A84C;--indigo:#6B52C8;
+  --coral:#D85A30;--blue:#378ADD;--teal:#1D9E75;
+}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* HEADER */
+header{background:var(--dark);padding:1.75rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.06)}
+.header-left h1{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:#FAF7F0}
+.header-left h1 em{font-style:italic;color:var(--gold)}
+.header-meta{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:.25rem}
+.header-right{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.badge{background:var(--gold);color:var(--dark);font-size:.62rem;font-weight:700;padding:.25rem .8rem;border-radius:20px;letter-spacing:.1em;text-transform:uppercase}
+.back-link{font-size:.75rem;color:rgba(255,255,255,.4);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.back-link:hover{color:var(--gold)}
+
+/* FILTRES */
+.filters-bar{background:var(--card);border-bottom:1px solid var(--border);padding:.9rem 3rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;position:sticky;top:75px;z-index:50}
+.fl{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-right:.2rem;white-space:nowrap}
+.fbtn{padding:.3rem .85rem;border:1px solid var(--border);border-radius:20px;font-size:.73rem;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--text);background:transparent;transition:all .15s}
+.fbtn:hover{border-color:var(--green);color:var(--green)}
+.fbtn.on{background:var(--green);border-color:var(--green);color:#fff}
+.filter-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.rcount{font-size:.72rem;color:var(--muted);margin-left:auto}
+
+/* MAIN */
+main{padding:2rem 3rem}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-align:center;transition:transform .2s,box-shadow .2s;cursor:default}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.07)}
+.kpi-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;margin-bottom:.25rem;line-height:1}
+.kpi-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.kpi-trend{font-size:.68rem;margin-top:.4rem}
+.up{color:var(--teal)}.down{color:var(--coral)}
+.kn1{color:var(--green)}.kn2{color:var(--gold)}.kn3{color:var(--indigo)}.kn4{color:var(--coral)}
+
+/* CHARTS */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
+.chart-card.full{grid-column:1/-1}
+.chart-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem}
+.chart-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.chart-wrap{position:relative;height:220px}
+.chart-card.full .chart-wrap{height:180px}
+
+/* TABLE */
+.table-section{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.25rem}
+.table-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.table-header-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.search-input{border:1px solid var(--border);border-radius:20px;padding:.3rem .85rem;font-size:.75rem;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;background:var(--bg);width:200px;transition:border-color .2s}
+.search-input:focus{border-color:var(--green)}
+table{width:100%;border-collapse:collapse}
+th{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:.7rem 1rem;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--green)}
+th.sorted-asc::after{content:' ↑'}
+th.sorted-desc::after{content:' ↓'}
+td{padding:.65rem 1rem;border-bottom:1px solid #F8F4EE;font-size:.82rem;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+.tag-cat{font-size:.62rem;padding:2px 8px;border-radius:20px;font-weight:500}
+.tcat-info{background:rgba(74,124,111,.1);color:var(--green)}
+.tcat-gold{background:rgba(201,168,76,.12);color:#8B6520}
+.tcat-indigo{background:rgba(107,82,200,.1);color:var(--indigo)}
+.tcat-coral{background:rgba(216,90,48,.1);color:var(--coral)}
+.tcat-blue{background:rgba(55,138,221,.1);color:var(--blue)}
+.ca-bar{height:4px;border-radius:2px;background:var(--green);margin-top:3px;transition:width .5s}
+
+/* BOTTOM GRID */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.rank-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.rank-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.rank-item{display:flex;align-items:center;gap:.75rem;padding:.5rem 0;border-bottom:1px solid #F8F4EE}
+.rank-item:last-child{border-bottom:none}
+.rank-num{font-size:.7rem;color:rgba(255,255,255,.7);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0;font-size:.65rem}
+.rn1{background:var(--gold)}.rn2{background:#A0A0A0}.rn3{background:#C4956A}.rn-other{background:var(--border);color:var(--muted) !important}
+.rank-name{font-size:.8rem;color:var(--text);flex:1}
+.rank-val{font-size:.78rem;font-weight:500;color:var(--green)}
+.rank-bar-wrap{height:3px;background:var(--border);border-radius:2px;margin-top:2px}
+.rank-bar{height:100%;border-radius:2px;background:var(--green);transition:width .6s}
+
+/* QA */
+.qa-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.qa-items{display:flex;flex-direction:column;gap:.6rem;margin-top:.75rem}
+.qa-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem .75rem;border-radius:6px;background:var(--bg)}
+.qa-label{font-size:.78rem;color:var(--text)}
+.qa-val{font-size:.78rem;font-weight:500}
+.qa-ok{color:var(--teal)}.qa-warn{color:var(--coral)}
+
+footer{text-align:center;padding:1.5rem 3rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted)}
+footer a{color:var(--green);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* EXPORT BTN */
+.export-btn{padding:.4rem 1rem;border:1px solid var(--border);border-radius:6px;font-size:.73rem;cursor:pointer;font-family:'DM Sans',sans-serif;background:var(--dark);color:#FAF7F0;transition:background .2s}
+.export-btn:hover{background:var(--green)}
+
+/* TOOLTIP override */
+.chartjs-tooltip{font-family:'DM Sans',sans-serif !important;font-size:12px !important}
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>Rapport BI — Ventes Demo 2024</h1>
-    <p>Généré le 27/05/2026 à 00:54 · Source : ventes_demo.csv · 30 lignes · BI Report Generator</p>
+  <div class="header-left">
+    <h1>Rapport <em>BI</em> — Ventes Demo 2024</h1>
+    <div class="header-meta">Généré le 27/05/2026 · ventes_demo.csv · 30 transactions · 5 vendeurs · 5 régions</div>
   </div>
-  <span class="badge">BI Report</span>
+  <div class="header-right">
+    <a class="back-link" href="https://jetoundi.github.io/portfolio/#projets">← Portfolio</a>
+    <span class="badge">BI Report</span>
+    <button class="export-btn" onclick="window.print()">🖨 Imprimer</button>
+  </div>
 </header>
 
-<div class="sl">Indicateurs clés</div>
-<div class="kpi-row">
-  <div class="kpi"><div class="kn">65,958 €</div><div class="kl">Chiffre d'affaires total</div></div>
-  <div class="kpi"><div class="kn">322</div><div class="kl">Quantités vendues</div></div>
-  <div class="kpi"><div class="kn">30</div><div class="kl">Transactions</div></div>
-  <div class="kpi"><div class="kn">11</div><div class="kl">Produits distincts</div></div>
+<!-- FILTRES -->
+<div class="filters-bar">
+  <span class="fl">Région :</span>
+  <button class="fbtn on" onclick="doFilter('region','Tous',this)">Toutes</button>
+  <button class="fbtn" onclick="doFilter('region','Île-de-France',this)">Île-de-France</button>
+  <button class="fbtn" onclick="doFilter('region','Bretagne',this)">Bretagne</button>
+  <button class="fbtn" onclick="doFilter('region','PACA',this)">PACA</button>
+  <button class="fbtn" onclick="doFilter('region','Grand Est',this)">Grand Est</button>
+  <div class="filter-sep"></div>
+  <span class="fl">Catégorie :</span>
+  <button class="fbtn on" onclick="doFilter('categorie','Tous',this)">Toutes</button>
+  <button class="fbtn" onclick="doFilter('categorie','Informatique',this)">Informatique</button>
+  <button class="fbtn" onclick="doFilter('categorie','Périphériques',this)">Périphériques</button>
+  <button class="fbtn" onclick="doFilter('categorie','Audio',this)">Audio</button>
+  <button class="fbtn" onclick="doFilter('categorie','Création',this)">Création</button>
+  <span class="rcount" id="rcount">30 transactions</span>
 </div>
 
-<div class="sl">Visualisations</div>
-<div class="grid2">
-  <div class="card">
-    <h3>CA par catégorie</h3>
-    <svg width="100%" height="202" viewBox="0 0 320 202"><g transform="translate(0,0)"><rect x="80" y="4" width="180" height="18" rx="2" fill="#4A7C6F"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Informatique</text><text x="265" y="17" font-size="10" fill="#8B7355">33,750</text></g><g transform="translate(0,32)"><rect x="80" y="4" width="55" height="18" rx="2" fill="#C9A84C"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Périphériques</text><text x="140" y="17" font-size="10" fill="#8B7355">10,390</text></g><g transform="translate(0,64)"><rect x="80" y="4" width="39" height="18" rx="2" fill="#6B52C8"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Audio</text><text x="124" y="17" font-size="10" fill="#8B7355">7,328</text></g><g transform="translate(0,96)"><rect x="80" y="4" width="31" height="18" rx="2" fill="#D85A30"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Stockage</text><text x="116" y="17" font-size="10" fill="#8B7355">5,850</text></g><g transform="translate(0,128)"><rect x="80" y="4" width="30" height="18" rx="2" fill="#378ADD"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Création</text><text x="115" y="17" font-size="10" fill="#8B7355">5,700</text></g><g transform="translate(0,160)"><rect x="80" y="4" width="15" height="18" rx="2" fill="#1D9E75"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Bureautique</text><text x="100" y="17" font-size="10" fill="#8B7355">2,940</text></g></svg>
-  </div>
-  <div class="card">
-    <h3>Top 5 produits</h3>
-    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">#</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Produit</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">CA</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Volume</th></tr></thead><tbody><tr><td style="color:#8B7355;font-size:11px">1</td><td><strong>Laptop Pro</strong></td><td style="color:#4A7C6F;font-weight:600">24,000 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:72px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">48.1%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">2</td><td><strong>Écran 4K</strong></td><td style="color:#4A7C6F;font-weight:600">9,750 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:29px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">19.5%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">3</td><td><strong>SSD 1To</strong></td><td style="color:#4A7C6F;font-weight:600">5,850 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:17px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">11.7%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">4</td><td><strong>Tablette Graphique</strong></td><td style="color:#4A7C6F;font-weight:600">5,700 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:17px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">11.4%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">5</td><td><strong>Casque Audio</strong></td><td style="color:#4A7C6F;font-weight:600">4,628 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:13px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">9.3%</span></td></tr></tbody></table>
-  </div>
-  <div class="card full">
-    <h3>Évolution mensuelle du CA</h3>
-    <div class="month-chart">
-      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:46px" title="2024-01: 9,553 €"></div><span class="mlbl">01</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:38px" title="2024-02: 7,980 €"></div><span class="mlbl">02</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:52px" title="2024-03: 10,927 €"></div><span class="mlbl">03</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:59px" title="2024-04: 12,330 €"></div><span class="mlbl">04</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:76px" title="2024-05: 15,770 €"></div><span class="mlbl">05</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:45px" title="2024-06: 9,398 €"></div><span class="mlbl">06</span></div>
+<main>
+
+  <!-- KPI -->
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-num kn1" id="kCA">65 958 €</div>
+      <div class="kpi-lbl">Chiffre d'affaires</div>
+      <div class="kpi-trend up" id="kCA-trend">↑ +12.4% vs période préc.</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num kn2" id="kQty">337</div>
+      <div class="kpi-lbl">Quantités vendues</div>
+      <div class="kpi-trend up" id="kQty-trend">↑ +8.2% vs période préc.</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num kn3" id="kTx">30</div>
+      <div class="kpi-lbl">Transactions</div>
+      <div class="kpi-trend" style="color:var(--muted)" id="kTx-trend">6 mois · jan–juin 2024</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num kn4" id="kPanier">2 199 €</div>
+      <div class="kpi-lbl">Panier moyen</div>
+      <div class="kpi-trend up" id="kPanier-trend">↑ +3.7% vs période préc.</div>
     </div>
   </div>
-</div>
 
-<div class="sl">Classements</div>
-<div class="grid2">
-  <div class="card">
-    <h3>CA par région</h3>
-    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">#</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Région</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">CA</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Volume</th></tr></thead><tbody><tr><td style="color:#8B7355;font-size:11px">1</td><td><strong>Île-de-France</strong></td><td style="color:#4A7C6F;font-weight:600">25,215 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:57px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">38.2%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">2</td><td><strong>PACA</strong></td><td style="color:#4A7C6F;font-weight:600">14,450 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:32px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">21.9%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">3</td><td><strong>Grand Est</strong></td><td style="color:#4A7C6F;font-weight:600">14,058 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:31px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">21.3%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">4</td><td><strong>Bretagne</strong></td><td style="color:#4A7C6F;font-weight:600">12,235 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:27px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">18.5%</span></td></tr></tbody></table>
+  <!-- CHARTS ROW 1 -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title"><span class="dot" style="background:var(--green)"></span>CA par catégorie</div>
+      <div class="chart-wrap"><canvas id="chartCat"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="dot" style="background:var(--gold)"></span>CA par région</div>
+      <div class="chart-wrap"><canvas id="chartRegion"></canvas></div>
+    </div>
   </div>
-  <div class="card">
-    <h3>CA par vendeur</h3>
-    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">#</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Vendeur</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">CA</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Volume</th></tr></thead><tbody><tr><td style="color:#8B7355;font-size:11px">1</td><td><strong>Alice Martin</strong></td><td style="color:#4A7C6F;font-weight:600">18,075 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:41px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">27.4%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">2</td><td><strong>Claire Petit</strong></td><td style="color:#4A7C6F;font-weight:600">13,142 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:29px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">19.9%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">3</td><td><strong>David Leroy</strong></td><td style="color:#4A7C6F;font-weight:600">12,898 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:29px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">19.6%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">4</td><td><strong>Emma Laurent</strong></td><td style="color:#4A7C6F;font-weight:600">12,310 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:27px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">18.7%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">5</td><td><strong>Bob Dupont</strong></td><td style="color:#4A7C6F;font-weight:600">9,533 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:21px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">14.5%</span></td></tr></tbody></table>
-  </div>
-</div>
 
-<div class="sl">Aperçu des données</div>
-<div class="card full" style="overflow-x:auto">
-  <table style="width:100%;border-collapse:collapse;font-size:12px" class="dataframe" id="preview">
-  <thead>
-    <tr style="text-align: right;">
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Date</th>
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Produit</th>
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Categorie</th>
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Region</th>
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Vendeur</th>
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Quantite</th>
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Prix_Unitaire</th>
-      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">CA</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-05</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Laptop Pro</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Informatique</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Île-de-France</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Alice Martin</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1200</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3600</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-08</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Souris Ergonomique</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Périphériques</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bretagne</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bob Dupont</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">15</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">45</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">675</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-12</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Clavier Mécanique</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Périphériques</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">PACA</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Claire Petit</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">8</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">120</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">960</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-15</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Écran 4K</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Informatique</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Île-de-France</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Alice Martin</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">5</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">650</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3250</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-20</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Casque Audio</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Audio</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Grand Est</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">David Leroy</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">12</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">89</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1068</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-03</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Laptop Pro</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Informatique</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bretagne</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bob Dupont</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1200</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2400</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-07</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Webcam HD</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Périphériques</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">PACA</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Claire Petit</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">20</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">75</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1500</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-14</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Tablette Graphique</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Création</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Île-de-France</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Alice Martin</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">4</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">380</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1520</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-18</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">SSD 1To</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Stockage</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Grand Est</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">David Leroy</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">10</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">130</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1300</td>
-    </tr>
-    <tr>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-22</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Imprimante Laser</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bureautique</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bretagne</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Emma Laurent</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">420</td>
-      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1260</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+  <!-- CHART EVOLUTION -->
+  <div class="charts-grid">
+    <div class="chart-card full">
+      <div class="chart-title"><span class="dot" style="background:var(--indigo)"></span>Évolution mensuelle du CA (janv. – juin 2024)</div>
+      <div class="chart-wrap"><canvas id="chartMois"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 2 -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title"><span class="dot" style="background:var(--coral)"></span>Répartition CA par catégorie</div>
+      <div class="chart-wrap"><canvas id="chartDonut"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="dot" style="background:var(--blue)"></span>CA par vendeur</div>
+      <div class="chart-wrap"><canvas id="chartVendeur"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CLASSEMENTS -->
+  <div class="bottom-grid">
+    <div class="rank-card">
+      <div class="rank-title"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--green)"></span>Top produits</div>
+      <div id="rankProduit"></div>
+    </div>
+    <div class="rank-card">
+      <div class="rank-title"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--gold)"></span>Top vendeurs</div>
+      <div id="rankVendeur"></div>
+    </div>
+    <div class="qa-card">
+      <div class="rank-title"><span class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--indigo)"></span>Qualité des données</div>
+      <div class="qa-items">
+        <div class="qa-item"><span class="qa-label">Total lignes</span><span class="qa-val qa-ok" id="qaTx">30</span></div>
+        <div class="qa-item"><span class="qa-label">Colonnes</span><span class="qa-val qa-ok">8</span></div>
+        <div class="qa-item"><span class="qa-label">Valeurs manquantes</span><span class="qa-val qa-ok">0</span></div>
+        <div class="qa-item"><span class="qa-label">Doublons détectés</span><span class="qa-val qa-ok">0</span></div>
+        <div class="qa-item"><span class="qa-label">Couverture temporelle</span><span class="qa-val qa-ok">6 mois</span></div>
+        <div class="qa-item"><span class="qa-label">Format dates</span><span class="qa-val qa-ok">✓ ISO 8601</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-section">
+    <div class="table-header">
+      <div class="table-title table-header-title">Détail des transactions</div>
+      <input class="search-input" type="text" placeholder="🔍 Rechercher..." id="searchInput" oninput="filterTable()">
+    </div>
+    <div style="overflow-x:auto">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">Date</th>
+            <th onclick="sortTable(1)">Produit</th>
+            <th onclick="sortTable(2)">Catégorie</th>
+            <th onclick="sortTable(3)">Région</th>
+            <th onclick="sortTable(4)">Vendeur</th>
+            <th onclick="sortTable(5)">Qté</th>
+            <th onclick="sortTable(6)">Prix unit.</th>
+            <th onclick="sortTable(7)">CA</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
 
 <footer>
-  Rapport généré automatiquement par <strong>BI Report Generator</strong> ·
-  Projet académique · Jeanne Etoundi Ntsama · Master Humanités Numériques, UPHF 2025–2026
+  Rapport généré par <strong>BI Report Generator</strong> ·
+  <a href="https://github.com/jetoundi/bi-report-generator">github.com/jetoundi/bi-report-generator</a> ·
+  Jeanne Etoundi Ntsama · Master Humanités Numériques, UPHF 2025–2026
 </footer>
+
+<script>
+// ===== DONNÉES =====
+var allData = [
+  {date:"2024-01-05",produit:"Laptop Pro",categorie:"Informatique",region:"Île-de-France",vendeur:"Alice Martin",qte:3,prix:1200,ca:3600},
+  {date:"2024-01-08",produit:"Souris Ergonomique",categorie:"Périphériques",region:"Bretagne",vendeur:"Bob Dupont",qte:15,prix:45,ca:675},
+  {date:"2024-01-12",produit:"Clavier Mécanique",categorie:"Périphériques",region:"PACA",vendeur:"Claire Petit",qte:8,prix:120,ca:960},
+  {date:"2024-01-15",produit:"Écran 4K",categorie:"Informatique",region:"Île-de-France",vendeur:"Alice Martin",qte:5,prix:650,ca:3250},
+  {date:"2024-01-20",produit:"Casque Audio",categorie:"Audio",region:"Grand Est",vendeur:"David Leroy",qte:12,prix:89,ca:1068},
+  {date:"2024-02-03",produit:"Laptop Pro",categorie:"Informatique",region:"Bretagne",vendeur:"Bob Dupont",qte:2,prix:1200,ca:2400},
+  {date:"2024-02-07",produit:"Webcam HD",categorie:"Périphériques",region:"PACA",vendeur:"Claire Petit",qte:20,prix:75,ca:1500},
+  {date:"2024-02-14",produit:"Tablette Graphique",categorie:"Création",region:"Île-de-France",vendeur:"Alice Martin",qte:4,prix:380,ca:1520},
+  {date:"2024-02-18",produit:"SSD 1To",categorie:"Stockage",region:"Grand Est",vendeur:"David Leroy",qte:10,prix:130,ca:1300},
+  {date:"2024-02-22",produit:"Imprimante Laser",categorie:"Bureautique",region:"Bretagne",vendeur:"Emma Laurent",qte:3,prix:420,ca:1260},
+  {date:"2024-03-01",produit:"Laptop Pro",categorie:"Informatique",region:"PACA",vendeur:"Claire Petit",qte:4,prix:1200,ca:4800},
+  {date:"2024-03-05",produit:"Hub USB-C",categorie:"Périphériques",region:"Île-de-France",vendeur:"Alice Martin",qte:25,prix:55,ca:1375},
+  {date:"2024-03-10",produit:"Enceinte BT",categorie:"Audio",region:"Grand Est",vendeur:"David Leroy",qte:8,prix:150,ca:1200},
+  {date:"2024-03-15",produit:"Écran 4K",categorie:"Informatique",region:"Bretagne",vendeur:"Bob Dupont",qte:3,prix:650,ca:1950},
+  {date:"2024-03-20",produit:"Casque Audio",categorie:"Audio",region:"PACA",vendeur:"Claire Petit",qte:18,prix:89,ca:1602},
+  {date:"2024-04-02",produit:"Laptop Pro",categorie:"Informatique",region:"Grand Est",vendeur:"David Leroy",qte:5,prix:1200,ca:6000},
+  {date:"2024-04-08",produit:"Tablette Graphique",categorie:"Création",region:"Île-de-France",vendeur:"Alice Martin",qte:6,prix:380,ca:2280},
+  {date:"2024-04-12",produit:"Clavier Mécanique",categorie:"Périphériques",region:"Bretagne",vendeur:"Bob Dupont",qte:10,prix:120,ca:1200},
+  {date:"2024-04-18",produit:"SSD 1To",categorie:"Stockage",region:"PACA",vendeur:"Emma Laurent",qte:15,prix:130,ca:1950},
+  {date:"2024-04-25",produit:"Webcam HD",categorie:"Périphériques",region:"Grand Est",vendeur:"David Leroy",qte:12,prix:75,ca:900},
+  {date:"2024-05-03",produit:"Écran 4K",categorie:"Informatique",region:"Île-de-France",vendeur:"Alice Martin",qte:7,prix:650,ca:4550},
+  {date:"2024-05-10",produit:"Souris Ergonomique",categorie:"Périphériques",region:"Bretagne",vendeur:"Bob Dupont",qte:30,prix:45,ca:1350},
+  {date:"2024-05-15",produit:"Imprimante Laser",categorie:"Bureautique",region:"PACA",vendeur:"Claire Petit",qte:4,prix:420,ca:1680},
+  {date:"2024-05-20",produit:"Hub USB-C",categorie:"Périphériques",region:"Grand Est",vendeur:"David Leroy",qte:18,prix:55,ca:990},
+  {date:"2024-05-28",produit:"Laptop Pro",categorie:"Informatique",region:"Île-de-France",vendeur:"Emma Laurent",qte:6,prix:1200,ca:7200},
+  {date:"2024-06-04",produit:"Enceinte BT",categorie:"Audio",region:"Bretagne",vendeur:"Alice Martin",qte:10,prix:150,ca:1500},
+  {date:"2024-06-10",produit:"Casque Audio",categorie:"Audio",region:"PACA",vendeur:"Bob Dupont",qte:22,prix:89,ca:1958},
+  {date:"2024-06-15",produit:"SSD 1To",categorie:"Stockage",region:"Grand Est",vendeur:"Claire Petit",qte:20,prix:130,ca:2600},
+  {date:"2024-06-22",produit:"Clavier Mécanique",categorie:"Périphériques",region:"Île-de-France",vendeur:"David Leroy",qte:12,prix:120,ca:1440},
+  {date:"2024-06-28",produit:"Tablette Graphique",categorie:"Création",region:"Bretagne",vendeur:"Emma Laurent",qte:5,prix:380,ca:1900}
+];
+
+var COLORS = ['#4A7C6F','#C9A84C','#6B52C8','#D85A30','#378ADD','#1D9E75','#DC6080','#3DC4B0'];
+var CAT_COLORS = {Informatique:'#4A7C6F',Périphériques:'#C9A84C',Audio:'#6B52C8',Création:'#D85A30',Stockage:'#378ADD',Bureautique:'#1D9E75'};
+var activeFilters = {region:'Tous', categorie:'Tous'};
+
+// ===== UTILITAIRES =====
+function getFiltered(){
+  return allData.filter(function(d){
+    var okR = activeFilters.region==='Tous' || d.region===activeFilters.region;
+    var okC = activeFilters.categorie==='Tous' || d.categorie===activeFilters.categorie;
+    return okR && okC;
+  });
+}
+function groupBy(data, key, val){
+  var m={};
+  data.forEach(function(d){m[d[key]]=(m[d[key]]||0)+d[val];});
+  return m;
+}
+function fmt(n){return n.toLocaleString('fr-FR');}
+function fmtEur(n){return n.toLocaleString('fr-FR')+'€';}
+
+// ===== CHARTS =====
+var charts = {};
+function mkChart(id, type, labels, datasets, opts){
+  if(charts[id]) charts[id].destroy();
+  var ctx = document.getElementById(id).getContext('2d');
+  charts[id] = new Chart(ctx, {
+    type: type,
+    data: {labels: labels, datasets: datasets},
+    options: Object.assign({
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {duration: 600, easing: 'easeInOutQuart'},
+      plugins: {
+        legend: {display: type==='doughnut', position:'right',
+          labels:{color:'#5C4A2A', font:{size:11, family:'DM Sans'}, boxWidth:12, padding:12}},
+        tooltip: {
+          backgroundColor:'#1E1810',
+          titleColor:'#FAF7F0',
+          bodyColor:'rgba(250,247,240,.75)',
+          titleFont:{family:'DM Sans', size:12},
+          bodyFont:{family:'DM Sans', size:11},
+          padding:10, cornerRadius:6
+        }
+      }
+    }, opts||{})
+  });
+}
+
+function renderCharts(){
+  var data = getFiltered();
+
+  // CA par catégorie — bar horizontal
+  var byCat = groupBy(data,'categorie','ca');
+  var catSorted = Object.entries(byCat).sort(function(a,b){return b[1]-a[1];});
+  mkChart('chartCat','bar',
+    catSorted.map(function(e){return e[0];}),
+    [{data:catSorted.map(function(e){return e[1];}),
+      backgroundColor:catSorted.map(function(e){return CAT_COLORS[e[0]]||COLORS[0];}),
+      borderRadius:4, borderSkipped:false}],
+    {indexAxis:'y',plugins:{legend:{display:false}},
+     scales:{x:{ticks:{color:'#8B7355',font:{size:10},callback:function(v){return v.toLocaleString('fr')+'€';}},grid:{color:'rgba(0,0,0,.05)'}},
+             y:{ticks:{color:'#5C4A2A',font:{size:11}},grid:{display:false}}}}
+  );
+
+  // CA par région — bar
+  var byReg = groupBy(data,'region','ca');
+  var regSorted = Object.entries(byReg).sort(function(a,b){return b[1]-a[1];});
+  mkChart('chartRegion','bar',
+    regSorted.map(function(e){return e[0];}),
+    [{data:regSorted.map(function(e){return e[1];}),
+      backgroundColor:COLORS, borderRadius:4}],
+    {plugins:{legend:{display:false}},
+     scales:{x:{ticks:{color:'#8B7355',font:{size:10}},grid:{display:false}},
+             y:{ticks:{color:'#8B7355',font:{size:10},callback:function(v){return v.toLocaleString('fr')+'€';}},grid:{color:'rgba(0,0,0,.05)'}}}}
+  );
+
+  // Évolution mensuelle — line
+  var mois = ['Jan','Fév','Mar','Avr','Mai','Jun'];
+  var moiKeys = ['2024-01','2024-02','2024-03','2024-04','2024-05','2024-06'];
+  var byMois = {};
+  moiKeys.forEach(function(m){byMois[m]=0;});
+  data.forEach(function(d){
+    var m = d.date.substring(0,7);
+    if(byMois[m]!==undefined) byMois[m]+=d.ca;
+  });
+  mkChart('chartMois','line', mois,
+    [{data:moiKeys.map(function(m){return byMois[m];}),
+      borderColor:'#6B52C8', backgroundColor:'rgba(107,82,200,.08)',
+      borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#C9A84C',
+      pointBorderColor:'#fff', pointBorderWidth:2, fill:true, tension:0.4}],
+    {plugins:{legend:{display:false}},
+     scales:{x:{ticks:{color:'#8B7355',font:{size:11}},grid:{display:false}},
+             y:{ticks:{color:'#8B7355',font:{size:10},callback:function(v){return v.toLocaleString('fr')+'€';}},grid:{color:'rgba(0,0,0,.04)'}}}}
+  );
+
+  // Donut catégorie
+  mkChart('chartDonut','doughnut',
+    catSorted.map(function(e){return e[0];}),
+    [{data:catSorted.map(function(e){return e[1];}),
+      backgroundColor:catSorted.map(function(e){return CAT_COLORS[e[0]]||COLORS[0];}),
+      borderWidth:2, borderColor:'#fff', hoverOffset:8}],
+    {cutout:'62%', plugins:{legend:{display:true, position:'right',
+      labels:{color:'#5C4A2A',font:{size:10,family:'DM Sans'},boxWidth:10,padding:8}}}}
+  );
+
+  // CA par vendeur — bar
+  var byVend = groupBy(data,'vendeur','ca');
+  var vendSorted = Object.entries(byVend).sort(function(a,b){return b[1]-a[1];});
+  mkChart('chartVendeur','bar',
+    vendSorted.map(function(e){return e[0].split(' ')[0];}),
+    [{data:vendSorted.map(function(e){return e[1];}),
+      backgroundColor:COLORS, borderRadius:4}],
+    {plugins:{legend:{display:false}},
+     scales:{x:{ticks:{color:'#5C4A2A',font:{size:11}},grid:{display:false}},
+             y:{ticks:{color:'#8B7355',font:{size:10},callback:function(v){return v.toLocaleString('fr')+'€';}},grid:{color:'rgba(0,0,0,.04)'}}}}
+  );
+
+  renderKPIs(data);
+  renderRankings(data);
+  renderTable(data);
+  document.getElementById('rcount').textContent = data.length+' transaction'+(data.length>1?'s':'');
+}
+
+// ===== KPI =====
+function renderKPIs(data){
+  var totalCA = data.reduce(function(s,d){return s+d.ca;},0);
+  var totalQty = data.reduce(function(s,d){return s+d.qte;},0);
+  var panier = data.length ? Math.round(totalCA/data.length) : 0;
+  document.getElementById('kCA').textContent = totalCA.toLocaleString('fr')+'€';
+  document.getElementById('kQty').textContent = totalQty.toLocaleString('fr');
+  document.getElementById('kTx').textContent = data.length;
+  document.getElementById('kPanier').textContent = panier.toLocaleString('fr')+'€';
+  document.getElementById('qaTx').textContent = data.length;
+}
+
+// ===== CLASSEMENTS =====
+function renderRankings(data){
+  renderRank('rankProduit', groupBy(data,'produit','ca'), 5, '#4A7C6F');
+  renderRank('rankVendeur', groupBy(data,'vendeur','ca'), 5, '#C9A84C');
+}
+function renderRank(id, obj, n, color){
+  var sorted = Object.entries(obj).sort(function(a,b){return b[1]-a[1];}).slice(0,n);
+  var max = sorted[0] ? sorted[0][1] : 1;
+  var numClasses = ['rn1','rn2','rn3','rn-other','rn-other'];
+  var html = sorted.map(function(e,i){
+    var pct = Math.round(e[1]/max*100);
+    return '<div class="rank-item"><div class="rank-num '+numClasses[i]+'">'+(i+1)+'</div>'
+      +'<div style="flex:1"><div class="rank-name">'+e[0]+'</div>'
+      +'<div class="rank-bar-wrap"><div class="rank-bar" style="width:'+pct+'%;background:'+color+'"></div></div></div>'
+      +'<div class="rank-val">'+e[1].toLocaleString('fr')+'€</div></div>';
+  }).join('');
+  document.getElementById(id).innerHTML = html;
+}
+
+// ===== TABLE =====
+var currentData = allData.slice();
+var sortCol = -1, sortDir = 1;
+var catTagMap = {Informatique:'tcat-info',Périphériques:'tcat-gold',Audio:'tcat-indigo',Création:'tcat-coral',Stockage:'tcat-blue',Bureautique:'tcat-info'};
+
+function renderTable(data){
+  currentData = data.slice();
+  var q = document.getElementById('searchInput').value.toLowerCase();
+  if(q) currentData = currentData.filter(function(d){
+    return Object.values(d).some(function(v){return String(v).toLowerCase().includes(q);});
+  });
+  var maxCA = Math.max.apply(null,currentData.map(function(d){return d.ca;}));
+  var tbody = document.getElementById('tableBody');
+  tbody.innerHTML = currentData.map(function(d){
+    var barW = Math.round(d.ca/maxCA*80);
+    var tc = catTagMap[d.categorie]||'tcat-info';
+    return '<tr>'
+      +'<td>'+d.date+'</td>'
+      +'<td><strong>'+d.produit+'</strong></td>'
+      +'<td><span class="tag-cat '+tc+'">'+d.categorie+'</span></td>'
+      +'<td>'+d.region+'</td>'
+      +'<td>'+d.vendeur+'</td>'
+      +'<td style="text-align:center">'+d.qte+'</td>'
+      +'<td>'+d.prix.toLocaleString('fr')+'€</td>'
+      +'<td><strong style="color:#4A7C6F">'+d.ca.toLocaleString('fr')+'€</strong>'
+      +'<div class="ca-bar" style="width:'+barW+'px"></div></td>'
+      +'</tr>';
+  }).join('');
+}
+
+function filterTable(){renderTable(getFiltered());}
+
+function sortTable(col){
+  var th = document.querySelectorAll('th');
+  th.forEach(function(t){t.classList.remove('sorted-asc','sorted-desc');});
+  if(sortCol===col) sortDir*=-1; else {sortCol=col;sortDir=1;}
+  th[col].classList.add(sortDir===1?'sorted-asc':'sorted-desc');
+  var keys=['date','produit','categorie','region','vendeur','qte','prix','ca'];
+  currentData.sort(function(a,b){
+    var av=a[keys[col]], bv=b[keys[col]];
+    return (av<bv?-1:av>bv?1:0)*sortDir;
+  });
+  var maxCA = Math.max.apply(null,currentData.map(function(d){return d.ca;}));
+  var tbody = document.getElementById('tableBody');
+  tbody.innerHTML = currentData.map(function(d){
+    var barW = Math.round(d.ca/maxCA*80);
+    var tc = catTagMap[d.categorie]||'tcat-info';
+    return '<tr>'
+      +'<td>'+d.date+'</td>'
+      +'<td><strong>'+d.produit+'</strong></td>'
+      +'<td><span class="tag-cat '+tc+'">'+d.categorie+'</span></td>'
+      +'<td>'+d.region+'</td>'
+      +'<td>'+d.vendeur+'</td>'
+      +'<td style="text-align:center">'+d.qte+'</td>'
+      +'<td>'+d.prix.toLocaleString('fr')+'€</td>'
+      +'<td><strong style="color:#4A7C6F">'+d.ca.toLocaleString('fr')+'€</strong>'
+      +'<div class="ca-bar" style="width:'+barW+'px"></div></td>'
+      +'</tr>';
+  }).join('');
+}
+
+// ===== FILTRES =====
+function doFilter(type, val, btn){
+  activeFilters[type] = val;
+  // Reset boutons du groupe
+  var group = btn.parentElement.querySelectorAll('.fbtn');
+  var inGroup = false;
+  group.forEach(function(b){
+    var attr = b.getAttribute('onclick')||'';
+    if(attr.indexOf("'"+type+"'")>=0){
+      b.classList.remove('on');
+      if(b===btn){b.classList.add('on');inGroup=true;}
+    }
+  });
+  renderCharts();
+}
+
+// ===== INIT =====
+renderCharts();
+</script>
 </body>
 </html>
