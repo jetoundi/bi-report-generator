@@ -1,0 +1,31 @@
+Date,Produit,Categorie,Region,Vendeur,Quantite,Prix_Unitaire,CA
+2024-01-05,Laptop Pro,Informatique,Île-de-France,Alice Martin,3,1200,3600
+2024-01-08,Souris Ergonomique,Périphériques,Bretagne,Bob Dupont,15,45,675
+2024-01-12,Clavier Mécanique,Périphériques,PACA,Claire Petit,8,120,960
+2024-01-15,Écran 4K,Informatique,Île-de-France,Alice Martin,5,650,3250
+2024-01-20,Casque Audio,Audio,Grand Est,David Leroy,12,89,1068
+2024-02-03,Laptop Pro,Informatique,Bretagne,Bob Dupont,2,1200,2400
+2024-02-07,Webcam HD,Périphériques,PACA,Claire Petit,20,75,1500
+2024-02-14,Tablette Graphique,Création,Île-de-France,Alice Martin,4,380,1520
+2024-02-18,SSD 1To,Stockage,Grand Est,David Leroy,10,130,1300
+2024-02-22,Imprimante Laser,Bureautique,Bretagne,Emma Laurent,3,420,1260
+2024-03-01,Laptop Pro,Informatique,PACA,Claire Petit,4,1200,4800
+2024-03-05,Hub USB-C,Périphériques,Île-de-France,Alice Martin,25,55,1375
+2024-03-10,Enceinte BT,Audio,Grand Est,David Leroy,8,150,1200
+2024-03-15,Écran 4K,Informatique,Bretagne,Bob Dupont,3,650,1950
+2024-03-20,Casque Audio,Audio,PACA,Claire Petit,18,89,1602
+2024-04-02,Laptop Pro,Informatique,Grand Est,David Leroy,5,1200,6000
+2024-04-08,Tablette Graphique,Création,Île-de-France,Alice Martin,6,380,2280
+2024-04-12,Clavier Mécanique,Périphériques,Bretagne,Bob Dupont,10,120,1200
+2024-04-18,SSD 1To,Stockage,PACA,Emma Laurent,15,130,1950
+2024-04-25,Webcam HD,Périphériques,Grand Est,David Leroy,12,75,900
+2024-05-03,Écran 4K,Informatique,Île-de-France,Alice Martin,7,650,4550
+2024-05-10,Souris Ergonomique,Périphériques,Bretagne,Bob Dupont,30,45,1350
+2024-05-15,Imprimante Laser,Bureautique,PACA,Claire Petit,4,420,1680
+2024-05-20,Hub USB-C,Périphériques,Grand Est,David Leroy,18,55,990
+2024-05-28,Laptop Pro,Informatique,Île-de-France,Emma Laurent,6,1200,7200
+2024-06-04,Enceinte BT,Audio,Bretagne,Alice Martin,10,150,1500
+2024-06-10,Casque Audio,Audio,PACA,Bob Dupont,22,89,1958
+2024-06-15,SSD 1To,Stockage,Grand Est,Claire Petit,20,130,2600
+2024-06-22,Clavier Mécanique,Périphériques,Île-de-France,David Leroy,12,120,1440
+2024-06-28,Tablette Graphique,Création,Bretagne,Emma Laurent,5,380,1900
