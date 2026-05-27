@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Rapport BI — Ventes Demo 2024</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#FDFAF3;color:#1E1810;font-family:'Segoe UI',sans-serif;padding:2rem;max-width:1100px;margin:0 auto}
+header{background:#1E1810;color:#FAF7F0;padding:2rem 2.5rem;border-radius:10px;margin-bottom:2rem;display:flex;justify-content:space-between;align-items:flex-start}
+header h1{font-size:1.6rem;font-weight:700;margin-bottom:.4rem}
+header p{font-size:.78rem;opacity:.45}
+.badge{background:#C9A84C;color:#1E1810;font-size:.65rem;font-weight:700;padding:.3rem .85rem;border-radius:20px;letter-spacing:.1em;text-transform:uppercase}
+.sl{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:#8B7355;margin:1.75rem 0 1rem;display:flex;align-items:center;gap:.75rem}
+.sl::after{content:'';flex:1;height:1px;background:#E4DDD0}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:.5rem}
+.kpi{background:white;border:1px solid #E4DDD0;border-radius:8px;padding:1.25rem;text-align:center}
+.kn{font-size:2rem;font-weight:700;color:#4A7C6F;margin-bottom:.25rem}
+.kl{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#8B7355}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.card{background:white;border:1px solid #E4DDD0;border-radius:8px;padding:1.5rem}
+.card h3{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:#8B7355;margin-bottom:1.1rem}
+.card.full{grid-column:1/-1}
+.month-chart{display:flex;align-items:flex-end;gap:4px;height:80px;padding-top:1rem}
+.mbar{background:#4A7C6F;border-radius:2px 2px 0 0;flex:1;transition:height .3s;position:relative}
+.mbar:hover{background:#C9A84C}
+.mlbl{font-size:8px;color:#8B7355;text-align:center;margin-top:3px;display:block}
+footer{text-align:center;padding:1.5rem;font-size:.7rem;color:#8B7355;border-top:1px solid #E4DDD0;margin-top:2rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Rapport BI — Ventes Demo 2024</h1>
+    <p>Généré le 27/05/2026 à 00:54 · Source : ventes_demo.csv · 30 lignes · BI Report Generator</p>
+  </div>
+  <span class="badge">BI Report</span>
+</header>
+
+<div class="sl">Indicateurs clés</div>
+<div class="kpi-row">
+  <div class="kpi"><div class="kn">65,958 €</div><div class="kl">Chiffre d'affaires total</div></div>
+  <div class="kpi"><div class="kn">322</div><div class="kl">Quantités vendues</div></div>
+  <div class="kpi"><div class="kn">30</div><div class="kl">Transactions</div></div>
+  <div class="kpi"><div class="kn">11</div><div class="kl">Produits distincts</div></div>
+</div>
+
+<div class="sl">Visualisations</div>
+<div class="grid2">
+  <div class="card">
+    <h3>CA par catégorie</h3>
+    <svg width="100%" height="202" viewBox="0 0 320 202"><g transform="translate(0,0)"><rect x="80" y="4" width="180" height="18" rx="2" fill="#4A7C6F"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Informatique</text><text x="265" y="17" font-size="10" fill="#8B7355">33,750</text></g><g transform="translate(0,32)"><rect x="80" y="4" width="55" height="18" rx="2" fill="#C9A84C"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Périphériques</text><text x="140" y="17" font-size="10" fill="#8B7355">10,390</text></g><g transform="translate(0,64)"><rect x="80" y="4" width="39" height="18" rx="2" fill="#6B52C8"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Audio</text><text x="124" y="17" font-size="10" fill="#8B7355">7,328</text></g><g transform="translate(0,96)"><rect x="80" y="4" width="31" height="18" rx="2" fill="#D85A30"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Stockage</text><text x="116" y="17" font-size="10" fill="#8B7355">5,850</text></g><g transform="translate(0,128)"><rect x="80" y="4" width="30" height="18" rx="2" fill="#378ADD"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Création</text><text x="115" y="17" font-size="10" fill="#8B7355">5,700</text></g><g transform="translate(0,160)"><rect x="80" y="4" width="15" height="18" rx="2" fill="#1D9E75"/><text x="75" y="17" text-anchor="end" font-size="10" fill="#5C4A2A">Bureautique</text><text x="100" y="17" font-size="10" fill="#8B7355">2,940</text></g></svg>
+  </div>
+  <div class="card">
+    <h3>Top 5 produits</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">#</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Produit</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">CA</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Volume</th></tr></thead><tbody><tr><td style="color:#8B7355;font-size:11px">1</td><td><strong>Laptop Pro</strong></td><td style="color:#4A7C6F;font-weight:600">24,000 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:72px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">48.1%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">2</td><td><strong>Écran 4K</strong></td><td style="color:#4A7C6F;font-weight:600">9,750 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:29px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">19.5%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">3</td><td><strong>SSD 1To</strong></td><td style="color:#4A7C6F;font-weight:600">5,850 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:17px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">11.7%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">4</td><td><strong>Tablette Graphique</strong></td><td style="color:#4A7C6F;font-weight:600">5,700 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:17px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">11.4%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">5</td><td><strong>Casque Audio</strong></td><td style="color:#4A7C6F;font-weight:600">4,628 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:13px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">9.3%</span></td></tr></tbody></table>
+  </div>
+  <div class="card full">
+    <h3>Évolution mensuelle du CA</h3>
+    <div class="month-chart">
+      <div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:46px" title="2024-01: 9,553 €"></div><span class="mlbl">01</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:38px" title="2024-02: 7,980 €"></div><span class="mlbl">02</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:52px" title="2024-03: 10,927 €"></div><span class="mlbl">03</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:59px" title="2024-04: 12,330 €"></div><span class="mlbl">04</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:76px" title="2024-05: 15,770 €"></div><span class="mlbl">05</span></div><div style="display:flex;flex-direction:column;align-items:center;flex:1"><div class="mbar" style="height:45px" title="2024-06: 9,398 €"></div><span class="mlbl">06</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sl">Classements</div>
+<div class="grid2">
+  <div class="card">
+    <h3>CA par région</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">#</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Région</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">CA</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Volume</th></tr></thead><tbody><tr><td style="color:#8B7355;font-size:11px">1</td><td><strong>Île-de-France</strong></td><td style="color:#4A7C6F;font-weight:600">25,215 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:57px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">38.2%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">2</td><td><strong>PACA</strong></td><td style="color:#4A7C6F;font-weight:600">14,450 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:32px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">21.9%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">3</td><td><strong>Grand Est</strong></td><td style="color:#4A7C6F;font-weight:600">14,058 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:31px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">21.3%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">4</td><td><strong>Bretagne</strong></td><td style="color:#4A7C6F;font-weight:600">12,235 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:27px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">18.5%</span></td></tr></tbody></table>
+  </div>
+  <div class="card">
+    <h3>CA par vendeur</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">#</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Vendeur</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">CA</th><th style="text-align:left;padding:6px 10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8B7355;border-bottom:1px solid #E4DDD0">Volume</th></tr></thead><tbody><tr><td style="color:#8B7355;font-size:11px">1</td><td><strong>Alice Martin</strong></td><td style="color:#4A7C6F;font-weight:600">18,075 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:41px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">27.4%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">2</td><td><strong>Claire Petit</strong></td><td style="color:#4A7C6F;font-weight:600">13,142 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:29px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">19.9%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">3</td><td><strong>David Leroy</strong></td><td style="color:#4A7C6F;font-weight:600">12,898 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:29px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">19.6%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">4</td><td><strong>Emma Laurent</strong></td><td style="color:#4A7C6F;font-weight:600">12,310 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:27px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">18.7%</span></td></tr><tr><td style="color:#8B7355;font-size:11px">5</td><td><strong>Bob Dupont</strong></td><td style="color:#4A7C6F;font-weight:600">9,533 €</td><td><div style="height:6px;border-radius:3px;background:#4A7C6F;width:21px;max-width:120px"></div><span style="font-size:10px;color:#8B7355;margin-left:4px">14.5%</span></td></tr></tbody></table>
+  </div>
+</div>
+
+<div class="sl">Aperçu des données</div>
+<div class="card full" style="overflow-x:auto">
+  <table style="width:100%;border-collapse:collapse;font-size:12px" class="dataframe" id="preview">
+  <thead>
+    <tr style="text-align: right;">
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Date</th>
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Produit</th>
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Categorie</th>
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Region</th>
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Vendeur</th>
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Quantite</th>
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">Prix_Unitaire</th>
+      <th style="text-align:left;padding:7px 10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8B7355;border-bottom:2px solid #E4DDD0">CA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-05</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Laptop Pro</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Informatique</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Île-de-France</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Alice Martin</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1200</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3600</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-08</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Souris Ergonomique</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Périphériques</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bretagne</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bob Dupont</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">15</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">45</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">675</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-12</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Clavier Mécanique</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Périphériques</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">PACA</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Claire Petit</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">8</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">120</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">960</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-15</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Écran 4K</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Informatique</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Île-de-France</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Alice Martin</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">5</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">650</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3250</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-01-20</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Casque Audio</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Audio</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Grand Est</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">David Leroy</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">12</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">89</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1068</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-03</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Laptop Pro</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Informatique</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bretagne</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bob Dupont</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1200</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2400</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-07</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Webcam HD</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Périphériques</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">PACA</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Claire Petit</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">20</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">75</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1500</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-14</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Tablette Graphique</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Création</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Île-de-France</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Alice Martin</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">4</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">380</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1520</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-18</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">SSD 1To</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Stockage</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Grand Est</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">David Leroy</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">10</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">130</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1300</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">2024-02-22</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Imprimante Laser</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bureautique</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Bretagne</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">Emma Laurent</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">3</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">420</td>
+      <td style="padding:6px 10px;border-bottom:1px solid #F0EDE7;color:#4A3D2A">1260</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<footer>
+  Rapport généré automatiquement par <strong>BI Report Generator</strong> ·
+  Projet académique · Jeanne Etoundi Ntsama · Master Humanités Numériques, UPHF 2025–2026
+</footer>
+</body>
+</html>
